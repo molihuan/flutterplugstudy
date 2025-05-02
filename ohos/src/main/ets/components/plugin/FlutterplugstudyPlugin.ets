@@ -7,6 +7,8 @@ import {
   MethodResult,
 } from '@ohos/flutter_ohos';
 
+import { deviceInfo } from '@kit.BasicServicesKit';
+
 /** FlutterplugstudyPlugin **/
 export default class FlutterplugstudyPlugin implements FlutterPlugin, MethodCallHandler {
   private channel: MethodChannel | null = null;
@@ -31,7 +33,7 @@ export default class FlutterplugstudyPlugin implements FlutterPlugin, MethodCall
 
   onMethodCall(call: MethodCall, result: MethodResult): void {
     if (call.method == "getPlatformVersion") {
-      result.success("OpenHarmony ^ ^ ")
+      result.success("OpenHarmony ^ ^ "+deviceInfo.osFullName)
     } else {
       result.notImplemented()
     }

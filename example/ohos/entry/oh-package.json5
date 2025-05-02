@@ -6,7 +6,6 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "integration_test": "file:../har/integration_test.har",
     "flutterplugstudy": "file:../har/flutterplugstudy.har"
   }
 }
