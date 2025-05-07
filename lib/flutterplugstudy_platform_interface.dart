@@ -26,4 +26,13 @@ abstract class FlutterplugstudyPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  ///  传递string类型参数
+  Future<String?> passingStr(String p) {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String?> passingMap(Map p) {
+    throw UnimplementedError('passingMap() has not been implemented.');
+  }
 }

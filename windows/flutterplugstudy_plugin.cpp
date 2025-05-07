@@ -51,7 +51,47 @@ void FlutterplugstudyPlugin::HandleMethodCall(
       version_stream << "7";
     }
     result->Success(flutter::EncodableValue(version_stream.str()));
-  } else {
+  } else if (method_call.method_name().compare("passingStr") == 0){
+
+      // Get all the arguments passed by the flutter side and convert them to maps
+      const auto* args = std::get_if<flutter::EncodableMap>(method_call.arguments());
+      if (!args){
+          //  没有参数
+          result->Error("no param");
+          return;
+      }
+
+      std::string ret = "windows get params:";
+      //  Obtain the parameter whose key is paramStr
+      auto param_iter = args->find(flutter::EncodableValue("paramStr"));
+      if (param_iter != args->end()){
+           std::string param_str = std::get<std::string>(param_iter->second);
+           std::cout << param_str << std::endl;
+           ret += param_str;
+      }
+
+      result->Success(ret);
+  }else if (method_call.method_name().compare("passingMap") == 0){
+
+      // Get all the arguments passed by the flutter side and convert them to maps
+      const auto* args = std::get_if<flutter::EncodableMap>(method_call.arguments());
+      if (!args){
+          //  no param
+          result->Error("no param");
+          return;
+      }
+
+      std::string ret = "windows get params:";
+
+      for (auto iter = args->begin(); iter != args->end(); iter++){
+          std::string key = std::get<std::string>(iter->first);
+          std::string value = std::get<std::string>(iter->second);
+          std::cout << key << ":" << value << std::endl;
+          ret += key + ":" + value + " ";
+      }
+
+      result->Success(ret);
+  }else {
     result->NotImplemented();
   }
 }

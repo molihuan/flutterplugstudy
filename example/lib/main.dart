@@ -31,8 +31,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _flutterplugstudyPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _flutterplugstudyPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -51,11 +51,29 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: [
+              Text('Running on: $_platformVersion\n'),
+              ElevatedButton(
+                  onPressed: () async {
+                    var resultStr =
+                        await _flutterplugstudyPlugin.passingStr("你好");
+                    print(resultStr);
+                  },
+                  child: Text("向原生传递String参数")),
+              ElevatedButton(
+                  onPressed: () async {
+                    var resultStr =
+                        await _flutterplugstudyPlugin.passingMap({
+                          "name": "张三",
+                          "age": "18",
+                        });
+                    print(resultStr);
+                  },
+                  child: Text("向原生传递Map参数"))
+            ],
+          ),
         ),
       ),
     );
