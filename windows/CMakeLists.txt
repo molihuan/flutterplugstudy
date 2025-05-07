@@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 3.14)
 
 # Project-level configuration.
 set(PROJECT_NAME "flutterplugstudy")
+# 指定 FFmpeg 安装目录，并将目录赋值给 FFMPEG_DEV_ROOT 变量，方便后续指令引用
+set(FFMPEG_DEV_ROOT "C:/Users/moli/.vmr/versions/ffmpeg_versions/ffmpeg/Library")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
@@ -44,9 +46,34 @@ target_compile_definitions(${PLUGIN_NAME} PRIVATE FLUTTER_PLUGIN_IMPL)
 
 # Source include directories and library dependencies. Add any plugin-specific
 # dependencies here.
+# 指定 FFmpeg 头文件目录
+include_directories(${FFMPEG_DEV_ROOT}/include)
 target_include_directories(${PLUGIN_NAME} INTERFACE
-  "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
+  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+# 指定链接器查找库文件  FFmpeg
+link_directories(${FFMPEG_DEV_ROOT}/lib)
+# 指定需要连接到程序中的库列表
+link_libraries(
+        ${FFMPEG_DEV_ROOT}/lib/avcodec.lib
+        ${FFMPEG_DEV_ROOT}/lib/avformat.lib
+        ${FFMPEG_DEV_ROOT}/lib/avutil.lib
+        ${FFMPEG_DEV_ROOT}/lib/swresample.lib
+        ${FFMPEG_DEV_ROOT}/lib/swscale.lib
+        ${FFMPEG_DEV_ROOT}/lib/avfilter.lib
+        ${FFMPEG_DEV_ROOT}/lib/avdevice.lib
+)
+target_link_libraries(${PLUGIN_NAME} PRIVATE
+        flutter
+        flutter_wrapper_plugin
+        ${FFMPEG_DEV_ROOT}/lib/avcodec.lib
+        ${FFMPEG_DEV_ROOT}/lib/avformat.lib
+        ${FFMPEG_DEV_ROOT}/lib/avutil.lib
+        ${FFMPEG_DEV_ROOT}/lib/swresample.lib
+        ${FFMPEG_DEV_ROOT}/lib/swscale.lib
+        ${FFMPEG_DEV_ROOT}/lib/avfilter.lib
+        ${FFMPEG_DEV_ROOT}/lib/avdevice.lib
+)
 
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
@@ -55,6 +82,20 @@ set(flutterplugstudy_bundled_libraries
   ""
   PARENT_SCOPE
 )
+
+# 设置 CMake 构建目录
+# 指定存放程序生成的静态库的目录
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+# 指定存放程序生成的动态库的目录
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+# 指定存放可执行软件的目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# 复制动态库 dll 文件
+# 查询 FFmpeg 安装目录下所有的动态库列表，并赋值给 ffmpeg_shared_libries 变量
+file(GLOB ffmpeg_shared_libries ${FFMPEG_DEV_ROOT}/bin/*dll)
+# 将 FFmpeg 动态库复制到 CMake 构建目录，运行程序需要用到
+file(COPY ${ffmpeg_shared_libries} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 # === Tests ===
 # These unit tests can be run from a terminal after building the example, or

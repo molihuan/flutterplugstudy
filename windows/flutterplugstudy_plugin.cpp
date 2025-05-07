@@ -13,6 +13,13 @@
 #include <memory>
 #include <sstream>
 
+
+extern "C" {
+#pragma warning(disable : 4244)
+#pragma warning(disable : 4819)
+#include <libavcodec/avcodec.h>
+}
+
 namespace flutterplugstudy {
 
 // static
@@ -50,6 +57,7 @@ void FlutterplugstudyPlugin::HandleMethodCall(
     } else if (IsWindows7OrGreater()) {
       version_stream << "7";
     }
+
     result->Success(flutter::EncodableValue(version_stream.str()));
   } else if (method_call.method_name().compare("passingStr") == 0){
 
@@ -69,6 +77,7 @@ void FlutterplugstudyPlugin::HandleMethodCall(
            std::cout << param_str << std::endl;
            ret += param_str;
       }
+      std::cout << avcodec_configuration() << std::endl;
 
       result->Success(ret);
   }else if (method_call.method_name().compare("passingMap") == 0){

@@ -1,6 +1,5 @@
 #ifndef FLUTTER_PLUGIN_FLUTTERPLUGSTUDY_PLUGIN_H_
 #define FLUTTER_PLUGIN_FLUTTERPLUGSTUDY_PLUGIN_H_
-
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
 
